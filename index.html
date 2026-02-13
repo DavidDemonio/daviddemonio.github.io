@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>David · Sistemas, Automatización, IA & Web</title>
+  <meta name="description" content="Portfolio de David — Sistemas y redes, automatización, IA aplicada, desarrollo web, VR tracking y servidores de Minecraft. Granada / remoto." />
+  <meta property="og:title" content="David · Portfolio" />
+  <meta property="og:description" content="Sistemas & redes · Automatización · IA aplicada · Web · VR tracking · Minecraft · Producción musical" />
+  <meta property="og:type" content="website" />
+
+  <!-- Tipografía -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Iconos (Lucide) -->
+  <script defer src="https://unpkg.com/lucide@0.563.0/dist/umd/lucide.js"></script>
+
+  <style>
+    :root{
+      --bg0:#070912;
+      --bg1:#0B1020;
+      --panel: rgba(255,255,255,.055);
+      --stroke: rgba(255,255,255,.12);
+      --stroke2: rgba(255,255,255,.18);
+      --txt:#EAF0FF;
+      --muted:rgba(234,240,255,.72);
+      --muted2:rgba(234,240,255,.55);
+      --accent:#6FFFD2;
+      --accent2:#6FA0FF;
+      --shadow2: 0 10px 32px rgba(0,0,0,.32);
+      --r: 18px;
+      --r2: 14px;
+      --max: 1120px;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 20% 12%, rgba(111,160,255,.10), transparent 60%),
+        radial-gradient(820px 520px at 80% 18%, rgba(111,255,210,.08), transparent 65%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      min-height:100vh;
+      overflow-x:hidden;
+      position: relative;
+    }
+
+    /* Ruido (sin mix-blend-mode para evitar artefactos raros en hover) */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.06;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      z-index:0;
+    }
+
+    header, main{ position: relative; z-index: 1; }
+
+    /* Texto con acento */
+    .grad{
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .grad2{
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding: 20px 18px 88px; }
+    .row{ display:flex; gap:14px; align-items:center; }
+    .grid{ display:grid; gap:16px; }
+    .muted{ color:var(--muted); }
+    .muted2{ color:var(--muted2); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
+    /* Panels */
+    .panel{
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      border-radius: var(--r);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .panel:hover{ border-color: var(--stroke2); }
+
+    /* Topbar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(7,9,18,.78);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .topbar .wrap{ padding: 12px 18px; }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+    .brand-badge{
+      width:34px;height:34px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .brand-badge svg{ width:18px; height:18px; }
+
+    nav{
+      margin-left:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .navlink{
+      padding: 9px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.88);
+      font-size: 13px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      user-select:none;
+    }
+    .navlink:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+    .navlink.active{ border-color: rgba(111,255,210,.38); background: rgba(111,255,210,.10); }
+    .navlink svg{ width:16px; height:16px; opacity:.95; }
+
+    /* Hero */
+    .hero{
+      margin-top: 16px;
+      padding: 22px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background:
+        radial-gradient(520px 260px at 22% 35%, rgba(111,255,210,.16), transparent 60%),
+        radial-gradient(540px 260px at 78% 30%, rgba(111,160,255,.14), transparent 62%);
+      opacity:.22;
+      filter: blur(16px);
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      font-size: 13px;
+      color: rgba(234,240,255,.86);
+      width: fit-content;
+    }
+    .badge svg{ width:16px; height:16px; opacity:.9; }
+
+    h1{
+      margin: 12px 0 10px;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: -1.2px;
+    }
+    .subtitle{
+      font-size: 16px;
+      max-width: 86ch;
+      line-height: 1.6;
+      color: rgba(234,240,255,.80);
+      margin: 0 0 16px;
+    }
+
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin: 12px 0 0;
+    }
+    .chip{
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: rgba(234,240,255,.78);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .chip svg{ width:15px; height:15px; opacity:.9; }
+
+    /* Buttons */
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 16px;
+    }
+    .btn{
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.92);
+      font-weight: 650;
+      font-size: 14px;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      cursor:pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.20); background: rgba(255,255,255,.06); }
+    .btn.primary{
+      border-color: rgba(111,255,210,.35);
+      background: rgba(111,255,210,.10);
+    }
+    .btn svg{ width:18px; height:18px; }
+
+    /* Sections */
+    section{ margin-top: 18px; }
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:16px;
+      margin: 22px 0 10px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing: -.2px;
+    }
+    .section-head p{ margin:0; color: var(--muted2); font-size: 13px; }
+
+    /* Cards */
+    .card{
+      padding: 16px;
+      border-radius: var(--r2);
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position:relative;
+      overflow:hidden;
+      min-height: 84px;
+    }
+    .card:hover{ border-color: var(--stroke2); }
+    .card h3{ margin:0 0 6px; font-size: 15px; letter-spacing:-.2px; }
+    .card p{ margin:0; font-size: 13px; line-height: 1.5; color: var(--muted); }
+
+    .meta{
+      margin-top: 10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      color: rgba(234,240,255,.78);
+    }
+    .tag svg{ width:14px; height:14px; opacity:.9; }
+
+    /* About */
+    .about{ grid-template-columns: repeat(12, 1fr); }
+    .about .a{ grid-column: span 7; }
+    .about .b{ grid-column: span 5; display:grid; gap:16px; }
+    .stat{
+      padding: 14px;
+      border-radius: var(--r2);
+      background: var(--panel);
+      border: 1px solid var(--stroke);
+    }
+    .stat .k{ font-size: 12px; color: var(--muted2); margin-bottom: 6px; }
+    .stat .v{ font-size: 14px; font-weight: 800; letter-spacing:-.2px; }
+
+    /* Projects */
+    .projects{ grid-template-columns: repeat(12, 1fr); }
+    .project{
+      grid-column: span 6;
+      cursor:pointer;
+      transition: transform .15s ease;
+    }
+    .project:hover{ transform: translateY(-2px); }
+    .project .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 8px;
+    }
+    .project .left{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .iconbox{
+      width:36px; height:36px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.10);
+      flex: 0 0 auto;
+    }
+    .iconbox svg{ width:18px; height:18px; }
+
+    .mini-pill{
+      font-size: 11px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      color: rgba(234,240,255,.74);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      white-space:nowrap;
+    }
+    .mini-pill svg{ width:14px; height:14px; opacity:.9; }
+
+    /* Filters */
+    .filters{
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .filter{
+      padding: 9px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.88);
+      font-size: 13px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      cursor:pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .filter:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+    .filter.active{ border-color: rgba(111,255,210,.38); background: rgba(111,255,210,.10); }
+    .filter svg{ width:16px; height:16px; opacity:.95; }
+
+    /* Skills layout */
+    .skills{ grid-template-columns: repeat(12, 1fr); }
+    .skills .card{ grid-column: span 6; }
+    .skill-list{
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: rgba(234,240,255,.78);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .skill-list li{ margin: 6px 0; }
+
+    /* Timeline */
+    .timeline{ grid-template-columns: repeat(12, 1fr); }
+    .timeline .card{ grid-column: span 6; }
+    .when{
+      display:flex; gap:10px; align-items:center;
+      font-size: 12px; color: var(--muted2);
+      margin-bottom: 10px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:99px;
+      background: rgba(111,255,210,.9);
+      box-shadow: 0 0 0 4px rgba(111,255,210,.14);
+    }
+
+    /* Contact */
+    .contact{ grid-template-columns: repeat(12, 1fr); }
+    .contact .left{ grid-column: span 7; }
+    .contact .right{ grid-column: span 5; }
+
+    .social{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
+    .social a{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 11px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      font-weight: 650;
+      font-size: 14px;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .social a:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.20); background: rgba(255,255,255,.06); }
+    .social svg{ width:18px; height:18px; }
+
+    .kv{
+      display:grid;
+      gap:10px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(234,240,255,.78);
+    }
+    .kv .item{
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .kv code{
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color: rgba(234,240,255,.90);
+    }
+    .smallbtn{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.90);
+      cursor:pointer;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      font-weight: 650;
+      font-size: 13px;
+    }
+    .smallbtn:hover{ border-color: rgba(255,255,255,.20); background: rgba(255,255,255,.06); }
+    .smallbtn svg{ width:16px; height:16px; }
+
+    footer{
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: var(--muted2);
+      font-size: 12px;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      z-index:100;
+      padding: 18px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .modal.open{ display:grid; }
+    .modal-card{
+      width: min(920px, 100%);
+      border-radius: 22px;
+      background: rgba(10,14,28,.82);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 30px 100px rgba(0,0,0,.55);
+      overflow:hidden;
+    }
+    .modal-head{
+      padding: 16px 16px 0;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    }
+    .modal-title{
+      display:flex; gap:12px; align-items:flex-start;
+    }
+    .modal-title h3{ margin:0; font-size: 18px; letter-spacing:-.3px; }
+    .modal-title p{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .xbtn{
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px;
+      width: 42px; height:42px;
+      display:grid; place-items:center;
+      cursor:pointer;
+    }
+    .xbtn:hover{ border-color: rgba(255,255,255,.20); background: rgba(255,255,255,.07); }
+    .xbtn svg{ width:18px; height:18px; }
+
+    .modal-body{
+      padding: 12px 16px 16px;
+      display:grid;
+      gap:14px;
+    }
+    .bullets{
+      margin:0;
+      padding-left: 18px;
+      color: rgba(234,240,255,.80);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .bullets li{ margin: 6px 0; }
+    .modal-footer{
+      padding: 12px 16px 16px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* Reveal */
+    .reveal{
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .reveal.on{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .about .a{ grid-column: span 12; }
+      .about .b{ grid-column: span 12; grid-template-columns: repeat(2,1fr); }
+      .project{ grid-column: span 12; }
+      .skills .card{ grid-column: span 12; }
+      .timeline .card{ grid-column: span 12; }
+      .contact .left{ grid-column: span 12; }
+      .contact .right{ grid-column: span 12; }
+    }
+    @media (max-width: 560px){
+      nav{ display:none; }
+      .about .b{ grid-template-columns: 1fr; }
+      .hero{ padding: 18px; }
+      .btn{ width: 100%; justify-content:center; }
+      .filters{ justify-content:flex-start; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .reveal{ transition:none; }
+      .project:hover{ transform:none; }
+      .navlink:hover,.btn:hover,.filter:hover,.social a:hover{ transform:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap row">
+      <a class="brand" href="#top" aria-label="Ir al inicio">
+        <span class="brand-badge"><i data-lucide="sparkles"></i></span>
+        <span>David</span>
+      </a>
+
+      <nav aria-label="Secciones">
+        <a class="navlink" href="#sobre-mi"><i data-lucide="user"></i> Perfil</a>
+        <a class="navlink" href="#proyectos"><i data-lucide="layers"></i> Proyectos</a>
+        <a class="navlink" href="#skills"><i data-lucide="wrench"></i> Competencias</a>
+        <a class="navlink" href="#experiencia"><i data-lucide="briefcase"></i> Experiencia</a>
+        <a class="navlink" href="#contacto"><i data-lucide="send"></i> Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+
+    <!-- HERO -->
+    <section class="panel hero reveal" aria-label="Presentación">
+      <div class="badge">
+        <i data-lucide="map-pin"></i>
+        Granada / remoto · <span class="mono">Open to Work</span>
+      </div>
+
+      <h1><span class="grad">Sistemas</span>, <span class="grad2">automatización</span>, <span class="grad">IA</span> aplicada y <span class="grad2">web</span>.</h1>
+
+      <p class="subtitle">
+        Soy <strong>David (18)</strong>, estudiante de <strong>FP SMR (Sistemas Microinformáticos y Redes)</strong> y actualmente en
+        <strong>FP Dual en Persone Solutions</strong> como <strong>Técnico Desarrollador de Inteligencia Artificial</strong>.
+        Disfruto construyendo soluciones prácticas que mejoran operaciones: menos fricción, más fiabilidad y mejor flujo de trabajo.
+      </p>
+
+      <div class="chips" aria-label="Áreas">
+        <span class="chip"><i data-lucide="server"></i> SysAdmin / NetAdmin</span>
+        <span class="chip"><i data-lucide="settings"></i> Automatización</span>
+        <span class="chip"><i data-lucide="brain-circuit"></i> IA aplicada</span>
+        <span class="chip"><i data-lucide="globe"></i> Desarrollo web</span>
+        <span class="chip"><i data-lucide="shield"></i> Seguridad / hardening</span>
+        <span class="chip"><i data-lucide="blocks"></i> Servidores Minecraft</span>
+        <span class="chip"><i data-lucide="camera"></i> VR tracking (pose)</span>
+        <span class="chip"><i data-lucide="music-2"></i> Producción musical</span>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href="#contacto"><i data-lucide="send"></i> Contactar</a>
+        <a class="btn" href="#proyectos"><i data-lucide="layers"></i> Ver proyectos</a>
+        <button class="btn" id="copyIntro" type="button" title="Copiar resumen">
+          <i data-lucide="copy"></i> Copiar resumen
+        </button>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="sobre-mi" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Perfil</h2>
+          <p>Un perfil técnico híbrido con mentalidad de operación.</p>
+        </div>
+        <span class="tag"><i data-lucide="badge-check"></i> Soft skills: equipo · comunicación · organización</span>
+      </div>
+
+      <div class="grid about">
+        <div class="card a">
+          <h3>Cómo trabajo</h3>
+          <p>
+            Me gustan los proyectos donde puedo mezclar <strong>sistemas</strong> + <strong>software</strong>:
+            automatizar tareas, construir paneles/dashboards y aterrizar ideas a soluciones que se usan.
+            Suelo cuidar la parte “operativa”: claridad, trazabilidad y que el resultado sea mantenible.
+          </p>
+
+          <div class="meta">
+            <span class="tag"><i data-lucide="target"></i> Orientado a resultados</span>
+            <span class="tag"><i data-lucide="repeat"></i> Constante</span>
+            <span class="tag"><i data-lucide="messages-square"></i> Comunicación clara</span>
+            <span class="tag"><i data-lucide="check-square"></i> Responsable</span>
+          </div>
+        </div>
+
+        <div class="b">
+          <div class="stat">
+            <div class="k">Formación</div>
+            <div class="v">FP SMR (Sistemas Microinformáticos y Redes)</div>
+          </div>
+          <div class="stat">
+            <div class="k">FP Dual</div>
+            <div class="v">Persone Solutions · Dev IA</div>
+          </div>
+          <div class="stat">
+            <div class="k">Intereses técnicos</div>
+            <div class="v">Infra · Automatización · IA · Web</div>
+          </div>
+          <div class="stat">
+            <div class="k">Extra</div>
+            <div class="v">Minecraft ops · Producción musical</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="proyectos" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Proyectos</h2>
+          <p>Selección de líneas de trabajo (clic para detalles).</p>
+        </div>
+        <div class="filters" aria-label="Filtros de proyectos">
+          <button class="filter active" data-filter="all" type="button"><i data-lucide="sparkles"></i> Todo</button>
+          <button class="filter" data-filter="infra" type="button"><i data-lucide="server"></i> Infra</button>
+          <button class="filter" data-filter="automation" type="button"><i data-lucide="settings"></i> Automatización</button>
+          <button class="filter" data-filter="ai" type="button"><i data-lucide="brain-circuit"></i> IA</button>
+          <button class="filter" data-filter="web" type="button"><i data-lucide="globe"></i> Web</button>
+          <button class="filter" data-filter="vr" type="button"><i data-lucide="camera"></i> VR</button>
+          <button class="filter" data-filter="mc" type="button"><i data-lucide="blocks"></i> Minecraft</button>
+          <button class="filter" data-filter="audio" type="button"><i data-lucide="music-2"></i> Audio</button>
+        </div>
+      </div>
+
+      <div id="projectGrid" class="grid projects" aria-label="Listado de proyectos"></div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Competencias</h2>
+          <p>Lo que hago bien (con foco en utilidad real y operación).</p>
+        </div>
+        <span class="tag"><i data-lucide="shield-check"></i> Estabilidad · seguridad · DX</span>
+      </div>
+
+      <div class="grid skills">
+        <div class="card">
+          <h3><i data-lucide="server"></i> Sistemas / Redes</h3>
+          <p>Administración, soporte, despliegues y resolución de incidencias con buen criterio operativo.</p>
+          <ul class="skill-list">
+            <li>Configuración y mantenimiento de servicios (entornos locales/producción).</li>
+            <li>Buenas prácticas: trazabilidad, backups, control de accesos.</li>
+            <li>Documentación y procedimientos claros para repetir resultados.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i data-lucide="settings"></i> Automatización</h3>
+          <p>Eliminar tareas repetitivas y hacer los flujos más rápidos y fiables.</p>
+          <ul class="skill-list">
+            <li>Scripts y utilidades internas para ahorrar tiempo y reducir errores.</li>
+            <li>Diseño con fallbacks: errores claros, logging y manejo de casos límite.</li>
+            <li>Paneles/dashboards para operación y seguimiento.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i data-lucide="brain-circuit"></i> IA aplicada</h3>
+          <p>Integración de IA cuando aporta valor (procesos y producto).</p>
+          <ul class="skill-list">
+            <li>Prototipado y despliegue de soluciones aplicadas.</li>
+            <li>Enfoque: utilidad, medición y mejora iterativa.</li>
+            <li>Integraciones creativas (incl. ecosistema Minecraft cuando encaja).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i data-lucide="globe"></i> Desarrollo web</h3>
+          <p>Frontend + backend orientado a herramientas y paneles.</p>
+          <ul class="skill-list">
+            <li>Construcción de interfaces limpias y fáciles de usar.</li>
+            <li>APIs y flujos “local/pro” con configuración clara.</li>
+            <li>Prioridad: mantenibilidad y claridad sobre “magia”.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i data-lucide="blocks"></i> Minecraft server engineering</h3>
+          <p>Experiencia montando y administrando servidores, con foco en estabilidad y rendimiento.</p>
+          <ul class="skill-list">
+            <li>Configuración, mantenimiento y soporte operativo.</li>
+            <li>Mejoras de estabilidad/rendimiento y buenas prácticas de operación.</li>
+            <li>Interés en aportar en seguridad/infra dentro del equipo de desarrollo.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3><i data-lucide="music-2"></i> Producción musical</h3>
+          <p>Producción, sonido y workflows creativos (con enfoque técnico).</p>
+          <ul class="skill-list">
+            <li>Organización de proyectos y procesos consistentes.</li>
+            <li>Visión “tech + creatividad” útil para contenido/eventos.</li>
+            <li>Interés en automatizar partes del workflow cuando aporta.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experiencia" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Experiencia</h2>
+          <p>Formación y práctica actual.</p>
+        </div>
+        <span class="tag"><i data-lucide="rocket"></i> Aprendizaje continuo · entrega de valor</span>
+      </div>
+
+      <div class="grid timeline">
+        <div class="card">
+          <div class="when"><span class="dot"></span>Actualidad</div>
+          <h3>FP Dual · Persone Solutions</h3>
+          <p>
+            Técnico Desarrollador de IA: soluciones aplicadas, automatización y mejoras de proceso.
+          </p>
+          <div class="meta">
+            <span class="tag"><i data-lucide="brain-circuit"></i> IA aplicada</span>
+            <span class="tag"><i data-lucide="settings"></i> Automatización</span>
+            <span class="tag"><i data-lucide="tool"></i> Herramientas internas</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="when"><span class="dot"></span>En curso</div>
+          <h3>FP SMR · Sistemas Microinformáticos y Redes</h3>
+          <p>
+            Sistemas, redes, servicios, seguridad y operación. Busco roles donde infra y software se complementen.
+          </p>
+          <div class="meta">
+            <span class="tag"><i data-lucide="server"></i> SysAdmin</span>
+            <span class="tag"><i data-lucide="network"></i> Redes</span>
+            <span class="tag"><i data-lucide="shield-check"></i> Seguridad</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="when"><span class="dot"></span>Proyectos propios</div>
+          <h3>Automatización · Web · Operación</h3>
+          <p>
+            Desarrollo de utilidades/paneles y prototipos full‑stack. Enfoque en DX, claridad y que sea mantenible.
+          </p>
+          <div class="meta">
+            <span class="tag"><i data-lucide="layers"></i> Full‑stack</span>
+            <span class="tag"><i data-lucide="terminal"></i> Scripts</span>
+            <span class="tag"><i data-lucide="activity"></i> Operación</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="when"><span class="dot"></span>Experiencia práctica</div>
+          <h3>Servidores de Minecraft</h3>
+          <p>
+            Montaje y administración de servidores, cuidando configuración, mantenimiento y mejoras de estabilidad/rendimiento.
+          </p>
+          <div class="meta">
+            <span class="tag"><i data-lucide="blocks"></i> Operación</span>
+            <span class="tag"><i data-lucide="shield"></i> Seguridad</span>
+            <span class="tag"><i data-lucide="zap"></i> Performance</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contacto" class="reveal">
+      <div class="section-head">
+        <div>
+          <h2>Contacto</h2>
+          <p>Enlaces y datos directos.</p>
+        </div>
+        <span class="tag"><i data-lucide="clock"></i> Respuesta ágil</span>
+      </div>
+
+      <div class="grid contact">
+        <div class="card left">
+          <h3>Redes</h3>
+          <p class="muted">Si quieres revisar mi perfil y proyectos, aquí están mis enlaces.</p>
+
+          <div class="social">
+            <a href="https://www.linkedin.com/in/david-torres-l%C3%B3pez-56b303394/" target="_blank" rel="noopener noreferrer" aria-label="Abrir LinkedIn">
+              <!-- Brand icon (inline SVG) -->
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4V9h4v2"/>
+                <rect x="2" y="9" width="4" height="12" rx="1"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+              LinkedIn
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+
+            <a href="https://github.com/DavidDemonio" target="_blank" rel="noopener noreferrer" aria-label="Abrir GitHub">
+              <!-- GitHub icon (inline) -->
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 19c-4 1.5-4-2.5-5-3m10 5v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 18 4.77 5.07 5.07 0 0 0 17.91 1S16.73.65 14 2.48a13.38 13.38 0 0 0-5 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+              </svg>
+              GitHub
+              <i data-lucide="arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="card right">
+          <h3>Discord</h3>
+          <p class="muted">Handles (copiar con un click):</p>
+
+          <div class="kv">
+            <div class="item">
+              <span>Secundaria (aplicaciones)</span>
+              <span style="display:flex; gap:8px; align-items:center;">
+                <code id="d1">davidddlol__</code>
+                <button class="smallbtn" data-copy="#d1" type="button"><i data-lucide="copy"></i> Copiar</button>
+              </span>
+            </div>
+            <div class="item">
+              <span>Principal (personal)</span>
+              <span style="display:flex; gap:8px; align-items:center;">
+                <code id="d2">kuroo787</code>
+                <button class="smallbtn" data-copy="#d2" type="button"><i data-lucide="copy"></i> Copiar</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="meta">
+            <button class="btn" id="copyAll" type="button"><i data-lucide="copy"></i> Copiar contacto</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <span>© <span id="year"></span> David</span>
+        <span class="mono">LinkedIn & GitHub enlazados</span>
+      </footer>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title">
+          <div class="iconbox" id="modalIcon" aria-hidden="true"><i data-lucide="layers"></i></div>
+          <div>
+            <h3 id="modalTitle">Proyecto</h3>
+            <p id="modalDesc">Descripción</p>
+          </div>
+        </div>
+        <button class="xbtn" id="closeModal" type="button" aria-label="Cerrar">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <ul class="bullets" id="modalBullets"></ul>
+        <div class="row" style="flex-wrap:wrap; gap:10px" id="modalTags"></div>
+      </div>
+
+      <div class="modal-footer">
+        <span class="muted2" id="modalMeta"></span>
+        <div class="row" style="flex-wrap:wrap; justify-content:flex-end">
+          <button class="btn" id="closeModal2" type="button"><i data-lucide="corner-down-left"></i> Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========= Datos de proyectos =========
+    const PROJECTS = [
+      {
+        id: "automation-suite",
+        icon: "settings",
+        title: "Automatización & herramientas internas",
+        subtitle: "Scripts, paneles y utilidades para mejorar procesos y ahorrar tiempo.",
+        categories: ["automation", "web", "infra"],
+        tags: ["Automatización", "Operación", "Herramientas"],
+        bullets: [
+          "Herramientas para reducir trabajo repetitivo y mejorar la trazabilidad.",
+          "Enfoque en errores claros, logging y pasos reproducibles.",
+          "Pensado para uso real: claridad, mantenimiento y operación."
+        ],
+        meta: "Automatización · Operación · Herramientas internas"
+      },
+      {
+        id: "vr-tracking",
+        icon: "camera",
+        title: "VR tracking por cámara + UI web",
+        subtitle: "Estimación de pose y una interfaz web para configuración/calibración.",
+        categories: ["vr", "ai", "web"],
+        tags: ["Visión", "Pose", "Calibración"],
+        bullets: [
+          "Pipeline de pose: entrada → estimación → configuración/calibración.",
+          "Interfaz web para selección de fuentes y asistente de calibración.",
+          "Mentalidad operativa: logs claros y modos de funcionamiento."
+        ],
+        meta: "VR · Computer Vision · Web UI"
+      },
+      {
+        id: "fullstack-experiments",
+        icon: "layers",
+        title: "Full‑stack (local/pro)",
+        subtitle: "Back + front + despliegue: prototipos que corren bien en local y escalan.",
+        categories: ["web", "infra", "automation"],
+        tags: ["Backend", "Frontend", "Deploy"],
+        bullets: [
+          "Construcción de paneles/APIs para herramientas y operación.",
+          "Configuración clara: entornos local/producción y documentación mínima útil.",
+          "Prioridad: mantenibilidad y DX (sin complicar por deporte)."
+        ],
+        meta: "Full‑stack · Entornos · DX"
+      },
+      {
+        id: "minecraft",
+        icon: "blocks",
+        title: "Minecraft server engineering",
+        subtitle: "Montaje, administración y mejoras de estabilidad/rendimiento.",
+        categories: ["mc", "infra", "automation", "ai"],
+        tags: ["Mantenimiento", "Rendimiento", "Seguridad"],
+        bullets: [
+          "Experiencia montando y administrando servidores: configuración y mantenimiento.",
+          "Mejoras orientadas a estabilidad/rendimiento y operación (procedimientos/checks).",
+          "Interés en aportar en seguridad/infra y herramientas internas del equipo."
+        ],
+        meta: "Minecraft · Infra · Operación"
+      },
+      {
+        id: "security",
+        icon: "shield",
+        title: "Seguridad práctica / hardening",
+        subtitle: "Buenas prácticas, control de accesos y operación segura.",
+        categories: ["infra", "security", "automation"],
+        tags: ["Hardening", "Accesos", "Buenas prácticas"],
+        bullets: [
+          "Seguridad como parte del flujo diario, no como ‘extra’.",
+          "Automatizar verificaciones y dejar trazabilidad de cambios.",
+          "Aplicable a infra, servicios y entornos de servidores."
+        ],
+        meta: "Seguridad · Hardening · Operación"
+      },
+      {
+        id: "music",
+        icon: "music-2",
+        title: "Producción musical",
+        subtitle: "Producción, sonido y workflows creativos con enfoque técnico.",
+        categories: ["audio", "automation"],
+        tags: ["Producción", "Workflow", "Creatividad"],
+        bullets: [
+          "Productor musical: equilibrio entre creatividad y técnica.",
+          "Organización y consistencia en procesos de trabajo.",
+          "Interés en automatizar partes del workflow cuando aporta valor."
+        ],
+        meta: "Audio · Producción · Workflow"
+      }
+    ];
+
+    // ========= Utils =========
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+    function toast(msg){
+      const t = document.createElement("div");
+      t.textContent = msg;
+      t.style.cssText = `
+        position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+        padding: 10px 12px; border-radius: 999px;
+        background: rgba(10,14,28,.88); border: 1px solid rgba(255,255,255,.16);
+        color: rgba(234,240,255,.92); font-size: 13px; z-index: 9999;
+        box-shadow: 0 20px 80px rgba(0,0,0,.55);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      `;
+      document.body.appendChild(t);
+      setTimeout(()=> t.remove(), 1900);
+    }
+
+    async function copy(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        toast("Copiado ✅");
+      }catch{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        toast("Copiado ✅");
+      }
+    }
+
+    // ========= Render projects =========
+    const grid = $("#projectGrid");
+
+    function projectCard(p){
+      const el = document.createElement("article");
+      el.className = "card project";
+      el.dataset.cats = p.categories.join(" ");
+      el.tabIndex = 0;
+      el.setAttribute("role", "button");
+      el.setAttribute("aria-label", `Abrir ${p.title}`);
+
+      el.innerHTML = `
+        <div class="top">
+          <div class="left">
+            <div class="iconbox" aria-hidden="true"><i data-lucide="${p.icon}"></i></div>
+            <div>
+              <h3>${p.title}</h3>
+              <p class="muted">${p.subtitle}</p>
+            </div>
+          </div>
+          <div class="right" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+            ${p.tags.slice(0,3).map(t => `<span class="mini-pill"><i data-lucide="tag"></i> ${t}</span>`).join("")}
+          </div>
+        </div>
+        <div class="meta">
+          <span class="tag"><i data-lucide="info"></i> ${p.meta}</span>
+          <span class="tag"><i data-lucide="mouse-pointer-click"></i> Detalles</span>
+        </div>
+      `;
+
+      el.addEventListener("click", ()=> openModal(p));
+      el.addEventListener("keydown", (e)=> {
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); openModal(p); }
+      });
+
+      return el;
+    }
+
+    function renderProjects(list){
+      grid.innerHTML = "";
+      list.forEach(p => grid.appendChild(projectCard(p)));
+      if(window.lucide) lucide.createIcons();
+    }
+
+    // ========= Filters =========
+    const filterBtns = $$("[data-filter]");
+    function applyFilter(filter){
+      filterBtns.forEach(b => b.classList.toggle("active", b.dataset.filter === filter));
+      const cards = $$(".project", grid);
+      cards.forEach(c => {
+        const show = (filter === "all") || c.dataset.cats.includes(filter);
+        c.style.display = show ? "" : "none";
+      });
+    }
+    filterBtns.forEach(btn => btn.addEventListener("click", ()=> applyFilter(btn.dataset.filter)));
+
+    // ========= Modal =========
+    const modal = $("#modal");
+    const closeModal = () => {
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+    };
+
+    function openModal(p){
+      $("#modalTitle").textContent = p.title;
+      $("#modalDesc").textContent = p.subtitle;
+      $("#modalMeta").textContent = p.meta;
+      $("#modalIcon").innerHTML = `<i data-lucide="${p.icon}"></i>`;
+
+      const ul = $("#modalBullets");
+      ul.innerHTML = "";
+      p.bullets.forEach(b => {
+        const li = document.createElement("li");
+        li.textContent = b;
+        ul.appendChild(li);
+      });
+
+      const tagWrap = $("#modalTags");
+      tagWrap.innerHTML = p.tags.map(t => `<span class="tag"><i data-lucide="tag"></i> ${t}</span>`).join("");
+
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+      if(window.lucide) lucide.createIcons();
+      $("#closeModal").focus();
+    }
+
+    $("#closeModal").addEventListener("click", closeModal);
+    $("#closeModal2").addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=> { if(e.target === modal) closeModal(); });
+    document.addEventListener("keydown", (e)=> { if(e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+
+    // ========= Reveal on scroll =========
+    const revealEls = $$(".reveal");
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(ent => {
+        if(ent.isIntersecting){
+          ent.target.classList.add("on");
+          io.unobserve(ent.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    // ========= Nav active on scroll =========
+    const navLinks = $$(".navlink");
+    const sections = navLinks.map(a => $(a.getAttribute("href"))).filter(Boolean);
+    const ioNav = new IntersectionObserver((entries)=>{
+      const visible = entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio - a.intersectionRatio)[0];
+      if(!visible) return;
+      const id = "#" + visible.target.id;
+      navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === id));
+    }, { threshold: [0.22, 0.4, 0.55] });
+    sections.forEach(s => ioNav.observe(s));
+
+    // ========= Copy =========
+    $("#year").textContent = new Date().getFullYear();
+
+    $("#copyIntro").addEventListener("click", ()=>{
+      const intro = `Soy David (18), estudiante de FP SMR y FP Dual como Técnico Desarrollador de IA. Combino sistemas/infra, automatización, IA aplicada y desarrollo web. También tengo experiencia montando y administrando servidores de Minecraft, con foco en estabilidad/rendimiento y operación.`;
+      copy(intro);
+    });
+
+    $$("[data-copy]").forEach(btn => {
+      btn.addEventListener("click", ()=>{
+        const sel = btn.getAttribute("data-copy");
+        const el = $(sel);
+        if(el) copy(el.textContent.trim());
+      });
+    });
+
+    $("#copyAll").addEventListener("click", ()=>{
+      const text = `LinkedIn: https://www.linkedin.com/in/david-torres-l%C3%B3pez-56b303394/\nGitHub: https://github.com/DavidDemonio\nDiscord: davidddlol__ / kuroo787`;
+      copy(text);
+    });
+
+    // ========= Init =========
+    renderProjects(PROJECTS);
+    applyFilter("all");
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if(window.lucide) lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
