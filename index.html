@@ -22,6 +22,12 @@
     :root{
       --bg0:#070912;
       --bg1:#0B1020;
+      --bg-top: #070912;
+      --bg-bottom: #0B1020;
+      --orb1-x: 20%;
+      --orb1-y: 12%;
+      --orb2-x: 80%;
+      --orb2-y: 18%;
       --panel: rgba(255,255,255,.055);
       --stroke: rgba(255,255,255,.12);
       --stroke2: rgba(255,255,255,.18);
@@ -43,9 +49,9 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--txt);
       background:
-        radial-gradient(900px 520px at 20% 12%, rgba(111,160,255,.10), transparent 60%),
-        radial-gradient(820px 520px at 80% 18%, rgba(111,255,210,.08), transparent 65%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
+        radial-gradient(900px 520px at var(--orb1-x) var(--orb1-y), rgba(111,160,255,.12), transparent 60%),
+        radial-gradient(820px 520px at var(--orb2-x) var(--orb2-y), rgba(111,255,210,.10), transparent 65%),
+        linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
       min-height:100vh;
       overflow-x:hidden;
       position: relative;
@@ -57,7 +63,7 @@
       position:fixed;
       inset:0;
       pointer-events:none;
-      opacity:.06;
+      opacity:.045;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
       z-index:0;
     }
@@ -104,10 +110,10 @@
       z-index:50;
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      background: rgba(7,9,18,.78);
+      background: rgba(7,9,18,.84);
       border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .topbar .wrap{ padding: 12px 18px; }
+    .topbar .wrap{ padding: 12px 18px; gap: 12px; }
     .brand{
       display:flex;
       align-items:center;
@@ -124,12 +130,20 @@
     }
     .brand-badge svg{ width:18px; height:18px; }
 
-    nav{
+    .top-actions{
       margin-left:auto;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      min-width:0;
+    }
+
+    nav{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
+      min-width: 0;
     }
 
     .navlink{
@@ -148,6 +162,39 @@
     .navlink:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
     .navlink.active{ border-color: rgba(111,255,210,.38); background: rgba(111,255,210,.10); }
     .navlink svg{ width:16px; height:16px; opacity:.95; }
+
+    .lang-switch{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:4px;
+      border-radius:999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      flex: 0 0 auto;
+    }
+    .lang-btn{
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(234,240,255,.78);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .4px;
+      min-width: 40px;
+      height: 32px;
+      cursor:pointer;
+      transition: background .18s ease, color .18s ease;
+    }
+    .lang-btn:hover{
+      background: rgba(255,255,255,.08);
+      color: rgba(234,240,255,.96);
+    }
+    .lang-btn.active{
+      background: rgba(111,255,210,.15);
+      color: rgba(234,240,255,.98);
+      box-shadow: inset 0 0 0 1px rgba(111,255,210,.42);
+    }
 
     /* Hero */
     .hero{
@@ -550,20 +597,38 @@
 
     /* Responsive */
     @media (max-width: 980px){
+      .topbar .wrap{ flex-wrap:wrap; }
+      .top-actions{ width:100%; }
+      nav{
+        flex: 1 1 auto;
+        flex-wrap: nowrap;
+        justify-content:flex-start;
+        overflow-x:auto;
+        scrollbar-width:none;
+        padding-bottom: 2px;
+      }
+      nav::-webkit-scrollbar{ display:none; }
+      .navlink{ white-space:nowrap; }
+      .lang-switch{ margin-left:auto; }
+
       .about .a{ grid-column: span 12; }
       .about .b{ grid-column: span 12; grid-template-columns: repeat(2,1fr); }
       .project{ grid-column: span 12; }
+      .project .top{ flex-direction:column; align-items:flex-start; }
       .skills .card{ grid-column: span 12; }
       .timeline .card{ grid-column: span 12; }
       .contact .left{ grid-column: span 12; }
       .contact .right{ grid-column: span 12; }
     }
     @media (max-width: 560px){
-      nav{ display:none; }
       .about .b{ grid-template-columns: 1fr; }
       .hero{ padding: 18px; }
       .btn{ width: 100%; justify-content:center; }
       .filters{ justify-content:flex-start; }
+      .navlink{ padding: 8px 10px; font-size: 12px; }
+      .lang-btn{ min-width: 36px; height: 30px; }
+      .kv .item{ align-items:flex-start; flex-direction:column; }
+      .kv .item > span:last-child{ width:100%; justify-content:space-between; }
     }
     @media (prefers-reduced-motion: reduce){
       html{ scroll-behavior:auto; }
@@ -577,54 +642,61 @@
 <body>
   <header class="topbar">
     <div class="wrap row">
-      <a class="brand" href="#top" aria-label="Ir al inicio">
+      <a class="brand" id="brandLink" href="#top" aria-label="Ir al inicio">
         <span class="brand-badge"><i data-lucide="sparkles"></i></span>
         <span>David</span>
       </a>
 
-      <nav aria-label="Secciones">
-        <a class="navlink" href="#sobre-mi"><i data-lucide="user"></i> Perfil</a>
-        <a class="navlink" href="#proyectos"><i data-lucide="layers"></i> Proyectos</a>
-        <a class="navlink" href="#skills"><i data-lucide="wrench"></i> Competencias</a>
-        <a class="navlink" href="#experiencia"><i data-lucide="briefcase"></i> Experiencia</a>
-        <a class="navlink" href="#contacto"><i data-lucide="send"></i> Contacto</a>
-      </nav>
+      <div class="top-actions">
+        <nav aria-label="Secciones" id="mainNav">
+          <a class="navlink" href="#sobre-mi"><i data-lucide="user"></i> <span id="navProfileText">Perfil</span></a>
+          <a class="navlink" href="#proyectos"><i data-lucide="layers"></i> <span id="navProjectsText">Proyectos</span></a>
+          <a class="navlink" href="#skills"><i data-lucide="wrench"></i> <span id="navSkillsText">Competencias</span></a>
+          <a class="navlink" href="#experiencia"><i data-lucide="briefcase"></i> <span id="navExperienceText">Experiencia</span></a>
+          <a class="navlink" href="#contacto"><i data-lucide="send"></i> <span id="navContactText">Contacto</span></a>
+        </nav>
+
+        <div class="lang-switch" id="langSwitch" role="group" aria-label="Selector de idioma">
+          <button class="lang-btn" type="button" data-lang-option="es">ES</button>
+          <button class="lang-btn" type="button" data-lang-option="en">EN</button>
+        </div>
+      </div>
     </div>
   </header>
 
   <main id="top" class="wrap">
 
     <!-- HERO -->
-    <section class="panel hero reveal" aria-label="Presentación">
+    <section class="panel hero reveal" id="heroSection" aria-label="Presentación">
       <div class="badge">
         <i data-lucide="map-pin"></i>
-        Granada / remoto · <span class="mono">Open to Work</span>
+        <span id="heroBadgePrefix">Granada / remoto ·</span> <span class="mono" id="heroAvailabilityText">Open to Work</span>
       </div>
 
-      <h1><span class="grad">Sistemas</span>, <span class="grad2">automatización</span>, <span class="grad">IA</span> aplicada y <span class="grad2">web</span>.</h1>
+      <h1 id="heroTitle"><span class="grad">Sistemas</span>, <span class="grad2">automatización</span>, <span class="grad">IA</span> aplicada y <span class="grad2">web</span>.</h1>
 
-      <p class="subtitle">
+      <p class="subtitle" id="heroSubtitle">
         Soy <strong>David (18)</strong>, estudiante de <strong>FP SMR (Sistemas Microinformáticos y Redes)</strong> y actualmente en
         <strong>FP Dual en Persone Solutions</strong> como <strong>Técnico Desarrollador de Inteligencia Artificial</strong>.
         Disfruto construyendo soluciones prácticas que mejoran operaciones: menos fricción, más fiabilidad y mejor flujo de trabajo.
       </p>
 
-      <div class="chips" aria-label="Áreas">
-        <span class="chip"><i data-lucide="server"></i> SysAdmin / NetAdmin</span>
-        <span class="chip"><i data-lucide="settings"></i> Automatización</span>
-        <span class="chip"><i data-lucide="brain-circuit"></i> IA aplicada</span>
-        <span class="chip"><i data-lucide="globe"></i> Desarrollo web</span>
-        <span class="chip"><i data-lucide="shield"></i> Seguridad / hardening</span>
-        <span class="chip"><i data-lucide="blocks"></i> Servidores Minecraft</span>
-        <span class="chip"><i data-lucide="camera"></i> VR tracking (pose)</span>
-        <span class="chip"><i data-lucide="music-2"></i> Producción musical</span>
+      <div class="chips" id="heroChips" aria-label="Áreas">
+        <span class="chip"><i data-lucide="server"></i> <span id="chipSysText">SysAdmin / NetAdmin</span></span>
+        <span class="chip"><i data-lucide="settings"></i> <span id="chipAutomationText">Automatización</span></span>
+        <span class="chip"><i data-lucide="brain-circuit"></i> <span id="chipAiText">IA aplicada</span></span>
+        <span class="chip"><i data-lucide="globe"></i> <span id="chipWebText">Desarrollo web</span></span>
+        <span class="chip"><i data-lucide="shield"></i> <span id="chipSecurityText">Seguridad / hardening</span></span>
+        <span class="chip"><i data-lucide="blocks"></i> <span id="chipMinecraftText">Servidores Minecraft</span></span>
+        <span class="chip"><i data-lucide="camera"></i> <span id="chipVrText">VR tracking (pose)</span></span>
+        <span class="chip"><i data-lucide="music-2"></i> <span id="chipMusicText">Producción musical</span></span>
       </div>
 
       <div class="actions">
-        <a class="btn primary" href="#contacto"><i data-lucide="send"></i> Contactar</a>
-        <a class="btn" href="#proyectos"><i data-lucide="layers"></i> Ver proyectos</a>
+        <a class="btn primary" href="#contacto"><i data-lucide="send"></i> <span id="ctaContactText">Contactar</span></a>
+        <a class="btn" href="#proyectos"><i data-lucide="layers"></i> <span id="ctaProjectsText">Ver proyectos</span></a>
         <button class="btn" id="copyIntro" type="button" title="Copiar resumen">
-          <i data-lucide="copy"></i> Copiar resumen
+          <i data-lucide="copy"></i> <span id="copyIntroText">Copiar resumen</span>
         </button>
       </div>
     </section>
@@ -633,14 +705,14 @@
     <section id="sobre-mi" class="reveal">
       <div class="section-head">
         <div>
-          <h2>Perfil</h2>
-          <p>Un perfil técnico híbrido con mentalidad de operación.</p>
+          <h2 id="aboutTitle">Perfil</h2>
+          <p id="aboutSubtitle">Un perfil técnico híbrido con mentalidad de operación.</p>
         </div>
-        <span class="tag"><i data-lucide="badge-check"></i> Soft skills: equipo · comunicación · organización</span>
+        <span class="tag"><i data-lucide="badge-check"></i> <span id="aboutTagText">Soft skills: equipo · comunicación · organización</span></span>
       </div>
 
       <div class="grid about">
-        <div class="card a">
+        <div class="card a" id="aboutMainCard">
           <h3>Cómo trabajo</h3>
           <p>
             Me gustan los proyectos donde puedo mezclar <strong>sistemas</strong> + <strong>software</strong>:
@@ -657,19 +729,19 @@
         </div>
 
         <div class="b">
-          <div class="stat">
+          <div class="stat" id="aboutStat1">
             <div class="k">Formación</div>
             <div class="v">FP SMR (Sistemas Microinformáticos y Redes)</div>
           </div>
-          <div class="stat">
+          <div class="stat" id="aboutStat2">
             <div class="k">FP Dual</div>
             <div class="v">Persone Solutions · Dev IA</div>
           </div>
-          <div class="stat">
+          <div class="stat" id="aboutStat3">
             <div class="k">Intereses técnicos</div>
             <div class="v">Infra · Automatización · IA · Web</div>
           </div>
-          <div class="stat">
+          <div class="stat" id="aboutStat4">
             <div class="k">Extra</div>
             <div class="v">Minecraft ops · Producción musical</div>
           </div>
@@ -681,18 +753,18 @@
     <section id="proyectos" class="reveal">
       <div class="section-head">
         <div>
-          <h2>Proyectos</h2>
-          <p>Selección de líneas de trabajo (clic para detalles).</p>
+          <h2 id="projectsTitle">Proyectos</h2>
+          <p id="projectsSubtitle">Selección de líneas de trabajo (clic para detalles).</p>
         </div>
-        <div class="filters" aria-label="Filtros de proyectos">
-          <button class="filter active" data-filter="all" type="button"><i data-lucide="sparkles"></i> Todo</button>
-          <button class="filter" data-filter="infra" type="button"><i data-lucide="server"></i> Infra</button>
-          <button class="filter" data-filter="automation" type="button"><i data-lucide="settings"></i> Automatización</button>
-          <button class="filter" data-filter="ai" type="button"><i data-lucide="brain-circuit"></i> IA</button>
-          <button class="filter" data-filter="web" type="button"><i data-lucide="globe"></i> Web</button>
-          <button class="filter" data-filter="vr" type="button"><i data-lucide="camera"></i> VR</button>
-          <button class="filter" data-filter="mc" type="button"><i data-lucide="blocks"></i> Minecraft</button>
-          <button class="filter" data-filter="audio" type="button"><i data-lucide="music-2"></i> Audio</button>
+        <div class="filters" id="projectFilters" aria-label="Filtros de proyectos">
+          <button class="filter active" data-filter="all" type="button"><i data-lucide="sparkles"></i> <span id="filterAllText">Todo</span></button>
+          <button class="filter" data-filter="infra" type="button"><i data-lucide="server"></i> <span id="filterInfraText">Infra</span></button>
+          <button class="filter" data-filter="automation" type="button"><i data-lucide="settings"></i> <span id="filterAutomationText">Automatización</span></button>
+          <button class="filter" data-filter="ai" type="button"><i data-lucide="brain-circuit"></i> <span id="filterAiText">IA</span></button>
+          <button class="filter" data-filter="web" type="button"><i data-lucide="globe"></i> <span id="filterWebText">Web</span></button>
+          <button class="filter" data-filter="vr" type="button"><i data-lucide="camera"></i> <span id="filterVrText">VR</span></button>
+          <button class="filter" data-filter="mc" type="button"><i data-lucide="blocks"></i> <span id="filterMinecraftText">Minecraft</span></button>
+          <button class="filter" data-filter="audio" type="button"><i data-lucide="music-2"></i> <span id="filterAudioText">Audio</span></button>
         </div>
       </div>
 
@@ -703,14 +775,14 @@
     <section id="skills" class="reveal">
       <div class="section-head">
         <div>
-          <h2>Competencias</h2>
-          <p>Lo que hago bien (con foco en utilidad real y operación).</p>
+          <h2 id="skillsTitle">Competencias</h2>
+          <p id="skillsSubtitle">Lo que hago bien (con foco en utilidad real y operación).</p>
         </div>
-        <span class="tag"><i data-lucide="shield-check"></i> Estabilidad · seguridad · DX</span>
+        <span class="tag"><i data-lucide="shield-check"></i> <span id="skillsTagText">Estabilidad · seguridad · DX</span></span>
       </div>
 
       <div class="grid skills">
-        <div class="card">
+        <div class="card" id="skillCardSys">
           <h3><i data-lucide="server"></i> Sistemas / Redes</h3>
           <p>Administración, soporte, despliegues y resolución de incidencias con buen criterio operativo.</p>
           <ul class="skill-list">
@@ -720,7 +792,7 @@
           </ul>
         </div>
 
-        <div class="card">
+        <div class="card" id="skillCardAutomation">
           <h3><i data-lucide="settings"></i> Automatización</h3>
           <p>Eliminar tareas repetitivas y hacer los flujos más rápidos y fiables.</p>
           <ul class="skill-list">
@@ -730,7 +802,7 @@
           </ul>
         </div>
 
-        <div class="card">
+        <div class="card" id="skillCardAi">
           <h3><i data-lucide="brain-circuit"></i> IA aplicada</h3>
           <p>Integración de IA cuando aporta valor (procesos y producto).</p>
           <ul class="skill-list">
@@ -740,7 +812,7 @@
           </ul>
         </div>
 
-        <div class="card">
+        <div class="card" id="skillCardWeb">
           <h3><i data-lucide="globe"></i> Desarrollo web</h3>
           <p>Frontend + backend orientado a herramientas y paneles.</p>
           <ul class="skill-list">
@@ -750,7 +822,7 @@
           </ul>
         </div>
 
-        <div class="card">
+        <div class="card" id="skillCardMinecraft">
           <h3><i data-lucide="blocks"></i> Minecraft server engineering</h3>
           <p>Experiencia montando y administrando servidores, con foco en estabilidad y rendimiento.</p>
           <ul class="skill-list">
@@ -760,7 +832,7 @@
           </ul>
         </div>
 
-        <div class="card">
+        <div class="card" id="skillCardMusic">
           <h3><i data-lucide="music-2"></i> Producción musical</h3>
           <p>Producción, sonido y workflows creativos (con enfoque técnico).</p>
           <ul class="skill-list">
@@ -776,14 +848,14 @@
     <section id="experiencia" class="reveal">
       <div class="section-head">
         <div>
-          <h2>Experiencia</h2>
-          <p>Formación y práctica actual.</p>
+          <h2 id="experienceTitle">Experiencia</h2>
+          <p id="experienceSubtitle">Formación y práctica actual.</p>
         </div>
-        <span class="tag"><i data-lucide="rocket"></i> Aprendizaje continuo · entrega de valor</span>
+        <span class="tag"><i data-lucide="rocket"></i> <span id="experienceTagText">Aprendizaje continuo · entrega de valor</span></span>
       </div>
 
       <div class="grid timeline">
-        <div class="card">
+        <div class="card" id="experienceCard1">
           <div class="when"><span class="dot"></span>Actualidad</div>
           <h3>FP Dual · Persone Solutions</h3>
           <p>
@@ -796,7 +868,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="experienceCard2">
           <div class="when"><span class="dot"></span>En curso</div>
           <h3>FP SMR · Sistemas Microinformáticos y Redes</h3>
           <p>
@@ -809,7 +881,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="experienceCard3">
           <div class="when"><span class="dot"></span>Proyectos propios</div>
           <h3>Automatización · Web · Operación</h3>
           <p>
@@ -822,7 +894,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="experienceCard4">
           <div class="when"><span class="dot"></span>Experiencia práctica</div>
           <h3>Servidores de Minecraft</h3>
           <p>
@@ -841,16 +913,16 @@
     <section id="contacto" class="reveal">
       <div class="section-head">
         <div>
-          <h2>Contacto</h2>
-          <p>Enlaces y datos directos.</p>
+          <h2 id="contactTitle">Contacto</h2>
+          <p id="contactSubtitle">Enlaces y datos directos.</p>
         </div>
-        <span class="tag"><i data-lucide="clock"></i> Respuesta ágil</span>
+        <span class="tag"><i data-lucide="clock"></i> <span id="contactTagText">Respuesta ágil</span></span>
       </div>
 
       <div class="grid contact">
         <div class="card left">
-          <h3>Redes</h3>
-          <p class="muted">Si quieres revisar mi perfil y proyectos, aquí están mis enlaces.</p>
+          <h3 id="socialsTitle">Redes</h3>
+          <p class="muted" id="socialsSubtitle">Si quieres revisar mi perfil y proyectos, aquí están mis enlaces.</p>
 
           <div class="social">
             <a href="https://www.linkedin.com/in/david-torres-l%C3%B3pez-56b303394/" target="_blank" rel="noopener noreferrer" aria-label="Abrir LinkedIn">
@@ -876,35 +948,35 @@
         </div>
 
         <div class="card right">
-          <h3>Discord</h3>
-          <p class="muted">Handles (copiar con un click):</p>
+          <h3 id="discordTitle">Discord</h3>
+          <p class="muted" id="discordSubtitle">Handles (copiar con un click):</p>
 
           <div class="kv">
             <div class="item">
-              <span>Secundaria (aplicaciones)</span>
+              <span id="discordSecondaryText">Secundaria (aplicaciones)</span>
               <span style="display:flex; gap:8px; align-items:center;">
                 <code id="d1">davidddlol__</code>
-                <button class="smallbtn" data-copy="#d1" type="button"><i data-lucide="copy"></i> Copiar</button>
+                <button class="smallbtn" data-copy="#d1" type="button"><i data-lucide="copy"></i> <span class="copyBtnText">Copiar</span></button>
               </span>
             </div>
             <div class="item">
-              <span>Principal (personal)</span>
+              <span id="discordPrimaryText">Principal (personal)</span>
               <span style="display:flex; gap:8px; align-items:center;">
                 <code id="d2">kuroo787</code>
-                <button class="smallbtn" data-copy="#d2" type="button"><i data-lucide="copy"></i> Copiar</button>
+                <button class="smallbtn" data-copy="#d2" type="button"><i data-lucide="copy"></i> <span class="copyBtnText">Copiar</span></button>
               </span>
             </div>
           </div>
 
           <div class="meta">
-            <button class="btn" id="copyAll" type="button"><i data-lucide="copy"></i> Copiar contacto</button>
+            <button class="btn" id="copyAll" type="button"><i data-lucide="copy"></i> <span id="copyAllText">Copiar contacto</span></button>
           </div>
         </div>
       </div>
 
       <footer>
         <span>© <span id="year"></span> David</span>
-        <span class="mono">LinkedIn & GitHub enlazados</span>
+        <span class="mono" id="footerLinksText">LinkedIn & GitHub enlazados</span>
       </footer>
     </section>
   </main>
@@ -933,7 +1005,7 @@
       <div class="modal-footer">
         <span class="muted2" id="modalMeta"></span>
         <div class="row" style="flex-wrap:wrap; justify-content:flex-end">
-          <button class="btn" id="closeModal2" type="button"><i data-lucide="corner-down-left"></i> Cerrar</button>
+          <button class="btn" id="closeModal2" type="button"><i data-lucide="corner-down-left"></i> <span id="closeModalText">Cerrar</span></button>
         </div>
       </div>
     </div>
@@ -1028,6 +1100,365 @@
       }
     ];
 
+    const PROJECTS_EN = {
+      "automation-suite": {
+        title: "Automation & internal tooling",
+        subtitle: "Scripts, dashboards, and utilities to improve processes and save time.",
+        tags: ["Automation", "Operations", "Tooling"],
+        bullets: [
+          "Tools to reduce repetitive work and improve traceability.",
+          "Focused on clear errors, logging, and reproducible steps.",
+          "Built for real use: clarity, maintainability, and operations."
+        ],
+        meta: "Automation · Operations · Internal tooling"
+      },
+      "vr-tracking": {
+        title: "Camera-based VR tracking + web UI",
+        subtitle: "Pose estimation with a web interface for setup and calibration.",
+        tags: ["Vision", "Pose", "Calibration"],
+        bullets: [
+          "Pose pipeline: input -> estimation -> setup/calibration.",
+          "Web UI for source selection and guided calibration.",
+          "Operational mindset: clear logs and runtime modes."
+        ],
+        meta: "VR · Computer Vision · Web UI"
+      },
+      "fullstack-experiments": {
+        title: "Full-stack (local/prod)",
+        subtitle: "Back + front + deployment: prototypes that run locally and scale.",
+        tags: ["Backend", "Frontend", "Deploy"],
+        bullets: [
+          "Building dashboards/APIs for tools and operations.",
+          "Clear setup for local/production environments.",
+          "Priority on maintainability and developer experience."
+        ],
+        meta: "Full-stack · Environments · DX"
+      },
+      "minecraft": {
+        title: "Minecraft server engineering",
+        subtitle: "Setup, administration, and stability/performance improvements.",
+        tags: ["Maintenance", "Performance", "Security"],
+        bullets: [
+          "Hands-on experience with server setup and administration.",
+          "Stability/performance improvements plus operational checks.",
+          "Strong interest in contributing to security/infra and team tooling."
+        ],
+        meta: "Minecraft · Infrastructure · Operations"
+      },
+      "security": {
+        title: "Practical security / hardening",
+        subtitle: "Best practices, access control, and secure operations.",
+        tags: ["Hardening", "Access", "Best practices"],
+        bullets: [
+          "Security treated as part of daily workflow, not an add-on.",
+          "Automated checks with traceability for operational changes.",
+          "Applied to infrastructure, services, and server environments."
+        ],
+        meta: "Security · Hardening · Operations"
+      },
+      "music": {
+        title: "Music production",
+        subtitle: "Production, sound, and creative workflows with a technical mindset.",
+        tags: ["Production", "Workflow", "Creativity"],
+        bullets: [
+          "Music producer balancing creativity with technical execution.",
+          "Consistent project organization and process discipline.",
+          "Interested in automating workflow parts when valuable."
+        ],
+        meta: "Audio · Production · Workflow"
+      }
+    };
+
+    const I18N = {
+      es: {
+        docTitle: "David · Sistemas, Automatización, IA & Web",
+        metaDescription: "Portfolio de David — Sistemas y redes, automatización, IA aplicada, desarrollo web, VR tracking y servidores de Minecraft. Granada / remoto.",
+        ogTitle: "David · Portfolio",
+        ogDescription: "Sistemas & redes · Automatización · IA aplicada · Web · VR tracking · Minecraft · Producción musical",
+        aria: {
+          brandLink: "Ir al inicio",
+          nav: "Secciones",
+          langSwitch: "Selector de idioma",
+          hero: "Presentación",
+          chips: "Áreas",
+          filters: "Filtros de proyectos",
+          projectGrid: "Listado de proyectos",
+          closeModal: "Cerrar",
+          linkedin: "Abrir LinkedIn",
+          github: "Abrir GitHub"
+        },
+        text: {
+          navProfileText: "Perfil",
+          navProjectsText: "Proyectos",
+          navSkillsText: "Competencias",
+          navExperienceText: "Experiencia",
+          navContactText: "Contacto",
+          heroBadgePrefix: "Granada / remoto ·",
+          heroAvailabilityText: "Open to Work",
+          chipSysText: "SysAdmin / NetAdmin",
+          chipAutomationText: "Automatización",
+          chipAiText: "IA aplicada",
+          chipWebText: "Desarrollo web",
+          chipSecurityText: "Seguridad / hardening",
+          chipMinecraftText: "Servidores Minecraft",
+          chipVrText: "VR tracking (pose)",
+          chipMusicText: "Producción musical",
+          ctaContactText: "Contactar",
+          ctaProjectsText: "Ver proyectos",
+          copyIntroText: "Copiar resumen",
+          aboutTitle: "Perfil",
+          aboutSubtitle: "Un perfil técnico híbrido con mentalidad de operación.",
+          aboutTagText: "Soft skills: equipo · comunicación · organización",
+          projectsTitle: "Proyectos",
+          projectsSubtitle: "Selección de líneas de trabajo (clic para detalles).",
+          filterAllText: "Todo",
+          filterInfraText: "Infra",
+          filterAutomationText: "Automatización",
+          filterAiText: "IA",
+          filterWebText: "Web",
+          filterVrText: "VR",
+          filterMinecraftText: "Minecraft",
+          filterAudioText: "Audio",
+          skillsTitle: "Competencias",
+          skillsSubtitle: "Lo que hago bien (con foco en utilidad real y operación).",
+          skillsTagText: "Estabilidad · seguridad · DX",
+          experienceTitle: "Experiencia",
+          experienceSubtitle: "Formación y práctica actual.",
+          experienceTagText: "Aprendizaje continuo · entrega de valor",
+          contactTitle: "Contacto",
+          contactSubtitle: "Enlaces y datos directos.",
+          contactTagText: "Respuesta ágil",
+          socialsTitle: "Redes",
+          socialsSubtitle: "Si quieres revisar mi perfil y proyectos, aquí están mis enlaces.",
+          discordTitle: "Discord",
+          discordSubtitle: "Handles (copiar con un click):",
+          discordSecondaryText: "Secundaria (aplicaciones)",
+          discordPrimaryText: "Principal (personal)",
+          copyMiniText: "Copiar",
+          copyAllText: "Copiar contacto",
+          footerLinksText: "LinkedIn & GitHub enlazados",
+          closeModalText: "Cerrar",
+          modalFallbackTitle: "Proyecto",
+          modalFallbackDesc: "Descripción"
+        },
+        messages: {
+          copied: "Copiado ✅",
+          details: "Detalles",
+          openProject: "Abrir"
+        },
+        copy: {
+          intro: "Soy David (18), estudiante de FP SMR y FP Dual como Técnico Desarrollador de IA. Combino sistemas/infra, automatización, IA aplicada y desarrollo web. También tengo experiencia montando y administrando servidores de Minecraft, con foco en estabilidad/rendimiento y operación.",
+          contact: "LinkedIn: https://www.linkedin.com/in/david-torres-l%C3%B3pez-56b303394/\nGitHub: https://github.com/DavidDemonio\nDiscord: davidddlol__ / kuroo787"
+        }
+      },
+      en: {
+        docTitle: "David · Systems, Automation, AI & Web",
+        metaDescription: "David's portfolio — systems and networks, automation, applied AI, web development, VR tracking, and Minecraft server engineering. Granada / remote.",
+        ogTitle: "David · Portfolio",
+        ogDescription: "Systems & networks · Automation · Applied AI · Web · VR tracking · Minecraft · Music production",
+        aria: {
+          brandLink: "Go to top",
+          nav: "Sections",
+          langSwitch: "Language selector",
+          hero: "Introduction",
+          chips: "Areas",
+          filters: "Project filters",
+          projectGrid: "Project list",
+          closeModal: "Close",
+          linkedin: "Open LinkedIn",
+          github: "Open GitHub"
+        },
+        text: {
+          navProfileText: "Profile",
+          navProjectsText: "Projects",
+          navSkillsText: "Skills",
+          navExperienceText: "Experience",
+          navContactText: "Contact",
+          heroBadgePrefix: "Granada / remote ·",
+          heroAvailabilityText: "Open to Work",
+          chipSysText: "SysAdmin / NetAdmin",
+          chipAutomationText: "Automation",
+          chipAiText: "Applied AI",
+          chipWebText: "Web development",
+          chipSecurityText: "Security / hardening",
+          chipMinecraftText: "Minecraft servers",
+          chipVrText: "VR tracking (pose)",
+          chipMusicText: "Music production",
+          ctaContactText: "Contact me",
+          ctaProjectsText: "View projects",
+          copyIntroText: "Copy summary",
+          aboutTitle: "Profile",
+          aboutSubtitle: "A hybrid technical profile with an operations mindset.",
+          aboutTagText: "Soft skills: teamwork · communication · organization",
+          projectsTitle: "Projects",
+          projectsSubtitle: "Selected work streams (click for details).",
+          filterAllText: "All",
+          filterInfraText: "Infra",
+          filterAutomationText: "Automation",
+          filterAiText: "AI",
+          filterWebText: "Web",
+          filterVrText: "VR",
+          filterMinecraftText: "Minecraft",
+          filterAudioText: "Audio",
+          skillsTitle: "Skills",
+          skillsSubtitle: "What I do well (focused on practical value and operations).",
+          skillsTagText: "Stability · security · DX",
+          experienceTitle: "Experience",
+          experienceSubtitle: "Current training and hands-on practice.",
+          experienceTagText: "Continuous learning · practical delivery",
+          contactTitle: "Contact",
+          contactSubtitle: "Direct links and contact details.",
+          contactTagText: "Fast response",
+          socialsTitle: "Social links",
+          socialsSubtitle: "If you want to review my profile and projects, here are my links.",
+          discordTitle: "Discord",
+          discordSubtitle: "Handles (copy with one click):",
+          discordSecondaryText: "Secondary (apps)",
+          discordPrimaryText: "Primary (personal)",
+          copyMiniText: "Copy",
+          copyAllText: "Copy contact",
+          footerLinksText: "LinkedIn & GitHub linked",
+          closeModalText: "Close",
+          modalFallbackTitle: "Project",
+          modalFallbackDesc: "Description"
+        },
+        messages: {
+          copied: "Copied ✅",
+          details: "Details",
+          openProject: "Open"
+        },
+        copy: {
+          intro: "I'm David (18), an SMR student and dual-program AI Developer Technician. I combine systems/infrastructure, automation, applied AI, and web development. I also have practical experience setting up and administering Minecraft servers, focused on stability, performance, and operations.",
+          contact: "LinkedIn: https://www.linkedin.com/in/david-torres-l%C3%B3pez-56b303394/\nGitHub: https://github.com/DavidDemonio\nDiscord: davidddlol__ / kuroo787"
+        }
+      }
+    };
+
+    const LANG_STORAGE_KEY = "portfolio-language";
+    const detectedLang = (navigator.language || "es").toLowerCase().startsWith("es") ? "es" : "en";
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY);
+    if(currentLang !== "es" && currentLang !== "en") currentLang = detectedLang;
+
+    let activeFilter = "all";
+    let activeProjectId = null;
+
+    const HTML_TRANSLATABLE_IDS = [
+      "heroTitle",
+      "heroSubtitle",
+      "aboutMainCard",
+      "aboutStat1",
+      "aboutStat2",
+      "aboutStat3",
+      "aboutStat4",
+      "skillCardSys",
+      "skillCardAutomation",
+      "skillCardAi",
+      "skillCardWeb",
+      "skillCardMinecraft",
+      "skillCardMusic",
+      "experienceCard1",
+      "experienceCard2",
+      "experienceCard3",
+      "experienceCard4"
+    ];
+
+    const I18N_HTML_EN = {
+      heroTitle: `<span class="grad">Systems</span>, <span class="grad2">automation</span>, applied <span class="grad">AI</span> and <span class="grad2">web</span>.`,
+      heroSubtitle: `I'm <strong>David (18)</strong>, currently studying <strong>Computer Systems and Networks (SMR)</strong> and doing a <strong>dual vocational placement at Persone Solutions</strong> as an <strong>AI Developer Technician</strong>. I enjoy building practical solutions that improve operations: less friction, more reliability, and better workflow.`,
+      aboutMainCard: `<h3>How I work</h3>
+        <p>
+          I enjoy projects where I can combine <strong>systems</strong> + <strong>software</strong>:
+          automating tasks, building dashboards, and turning ideas into tools people actually use.
+          I focus on the operational side: clarity, traceability, and maintainability.
+        </p>
+        <div class="meta">
+          <span class="tag"><i data-lucide="target"></i> Results-driven</span>
+          <span class="tag"><i data-lucide="repeat"></i> Consistent</span>
+          <span class="tag"><i data-lucide="messages-square"></i> Clear communication</span>
+          <span class="tag"><i data-lucide="check-square"></i> Reliable</span>
+        </div>`,
+      aboutStat1: `<div class="k">Education</div><div class="v">SMR Vocational Training (Computer Systems & Networks)</div>`,
+      aboutStat2: `<div class="k">Dual program</div><div class="v">Persone Solutions · AI Dev</div>`,
+      aboutStat3: `<div class="k">Technical interests</div><div class="v">Infrastructure · Automation · AI · Web</div>`,
+      aboutStat4: `<div class="k">Extra</div><div class="v">Minecraft ops · Music production</div>`,
+      skillCardSys: `<h3><i data-lucide="server"></i> Systems / Networks</h3>
+        <p>Administration, support, deployments, and incident resolution with strong operational judgment.</p>
+        <ul class="skill-list">
+          <li>Service setup and maintenance (local/production environments).</li>
+          <li>Best practices: traceability, backups, and access control.</li>
+          <li>Clear documentation and repeatable procedures.</li>
+        </ul>`,
+      skillCardAutomation: `<h3><i data-lucide="settings"></i> Automation</h3>
+        <p>Removing repetitive tasks and making workflows faster and more reliable.</p>
+        <ul class="skill-list">
+          <li>Internal scripts and utilities to save time and reduce errors.</li>
+          <li>Fallback-first design: clear errors, logging, and edge-case handling.</li>
+          <li>Dashboards for operations and tracking.</li>
+        </ul>`,
+      skillCardAi: `<h3><i data-lucide="brain-circuit"></i> Applied AI</h3>
+        <p>AI integration where it creates practical value (process and product).</p>
+        <ul class="skill-list">
+          <li>Prototyping and deploying applied solutions.</li>
+          <li>Focus on utility, measurement, and iterative improvement.</li>
+          <li>Creative integrations, including Minecraft ecosystem use cases.</li>
+        </ul>`,
+      skillCardWeb: `<h3><i data-lucide="globe"></i> Web development</h3>
+        <p>Frontend + backend focused on tools and operational interfaces.</p>
+        <ul class="skill-list">
+          <li>Building clean, usable interfaces.</li>
+          <li>APIs and local/prod flows with clear configuration.</li>
+          <li>Priority on maintainability and clarity over magic.</li>
+        </ul>`,
+      skillCardMinecraft: `<h3><i data-lucide="blocks"></i> Minecraft server engineering</h3>
+        <p>Experience setting up and managing servers with a focus on stability and performance.</p>
+        <ul class="skill-list">
+          <li>Configuration, maintenance, and operational support.</li>
+          <li>Stability/performance tuning and practical operations standards.</li>
+          <li>Interest in contributing to infra/security inside dev teams.</li>
+        </ul>`,
+      skillCardMusic: `<h3><i data-lucide="music-2"></i> Music production</h3>
+        <p>Production, sound, and creative workflows with a technical approach.</p>
+        <ul class="skill-list">
+          <li>Structured projects and consistent processes.</li>
+          <li>Tech + creativity mindset useful for content/events.</li>
+          <li>Interest in automating workflow parts when valuable.</li>
+        </ul>`,
+      experienceCard1: `<div class="when"><span class="dot"></span>Current</div>
+        <h3>Dual program · Persone Solutions</h3>
+        <p>AI Developer Technician: applied solutions, automation, and process improvements.</p>
+        <div class="meta">
+          <span class="tag"><i data-lucide="brain-circuit"></i> Applied AI</span>
+          <span class="tag"><i data-lucide="settings"></i> Automation</span>
+          <span class="tag"><i data-lucide="tool"></i> Internal tools</span>
+        </div>`,
+      experienceCard2: `<div class="when"><span class="dot"></span>In progress</div>
+        <h3>SMR Vocational Training · Computer Systems & Networks</h3>
+        <p>Systems, networks, services, security, and operations. Looking for roles where infra and software complement each other.</p>
+        <div class="meta">
+          <span class="tag"><i data-lucide="server"></i> SysAdmin</span>
+          <span class="tag"><i data-lucide="network"></i> Networks</span>
+          <span class="tag"><i data-lucide="shield-check"></i> Security</span>
+        </div>`,
+      experienceCard3: `<div class="when"><span class="dot"></span>Personal projects</div>
+        <h3>Automation · Web · Operations</h3>
+        <p>Utility/dashboard development and full-stack prototypes with focus on DX, clarity, and maintainability.</p>
+        <div class="meta">
+          <span class="tag"><i data-lucide="layers"></i> Full-stack</span>
+          <span class="tag"><i data-lucide="terminal"></i> Scripts</span>
+          <span class="tag"><i data-lucide="activity"></i> Operations</span>
+        </div>`,
+      experienceCard4: `<div class="when"><span class="dot"></span>Practical experience</div>
+        <h3>Minecraft servers</h3>
+        <p>Server setup and administration with attention to configuration, maintenance, and stability/performance improvements.</p>
+        <div class="meta">
+          <span class="tag"><i data-lucide="blocks"></i> Operations</span>
+          <span class="tag"><i data-lucide="shield"></i> Security</span>
+          <span class="tag"><i data-lucide="zap"></i> Performance</span>
+        </div>`
+    };
+
+    const ORIGINAL_HTML = {};
+
     // ========= Utils =========
     const $ = (sel, el=document) => el.querySelector(sel);
     const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
@@ -1050,7 +1481,7 @@
     async function copy(text){
       try{
         await navigator.clipboard.writeText(text);
-        toast("Copiado ✅");
+        toast(I18N[currentLang].messages.copied);
       }catch{
         const ta = document.createElement("textarea");
         ta.value = text;
@@ -1060,37 +1491,44 @@
         ta.select();
         document.execCommand("copy");
         ta.remove();
-        toast("Copiado ✅");
+        toast(I18N[currentLang].messages.copied);
       }
     }
 
     // ========= Render projects =========
     const grid = $("#projectGrid");
 
+    function getProjectByLang(project){
+      if(currentLang !== "en") return project;
+      const translated = PROJECTS_EN[project.id];
+      return translated ? { ...project, ...translated } : project;
+    }
+
     function projectCard(p){
+      const localized = getProjectByLang(p);
       const el = document.createElement("article");
       el.className = "card project";
-      el.dataset.cats = p.categories.join(" ");
+      el.dataset.cats = localized.categories.join(" ");
       el.tabIndex = 0;
       el.setAttribute("role", "button");
-      el.setAttribute("aria-label", `Abrir ${p.title}`);
+      el.setAttribute("aria-label", `${I18N[currentLang].messages.openProject} ${localized.title}`);
 
       el.innerHTML = `
         <div class="top">
           <div class="left">
-            <div class="iconbox" aria-hidden="true"><i data-lucide="${p.icon}"></i></div>
+            <div class="iconbox" aria-hidden="true"><i data-lucide="${localized.icon}"></i></div>
             <div>
-              <h3>${p.title}</h3>
-              <p class="muted">${p.subtitle}</p>
+              <h3>${localized.title}</h3>
+              <p class="muted">${localized.subtitle}</p>
             </div>
           </div>
           <div class="right" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
-            ${p.tags.slice(0,3).map(t => `<span class="mini-pill"><i data-lucide="tag"></i> ${t}</span>`).join("")}
+            ${localized.tags.slice(0,3).map(t => `<span class="mini-pill"><i data-lucide="tag"></i> ${t}</span>`).join("")}
           </div>
         </div>
         <div class="meta">
-          <span class="tag"><i data-lucide="info"></i> ${p.meta}</span>
-          <span class="tag"><i data-lucide="mouse-pointer-click"></i> Detalles</span>
+          <span class="tag"><i data-lucide="info"></i> ${localized.meta}</span>
+          <span class="tag"><i data-lucide="mouse-pointer-click"></i> ${I18N[currentLang].messages.details}</span>
         </div>
       `;
 
@@ -1111,6 +1549,7 @@
     // ========= Filters =========
     const filterBtns = $$("[data-filter]");
     function applyFilter(filter){
+      activeFilter = filter;
       filterBtns.forEach(b => b.classList.toggle("active", b.dataset.filter === filter));
       const cards = $$(".project", grid);
       cards.forEach(c => {
@@ -1119,41 +1558,187 @@
       });
     }
     filterBtns.forEach(btn => btn.addEventListener("click", ()=> applyFilter(btn.dataset.filter)));
+    $$("[data-lang-option]").forEach(btn => {
+      btn.addEventListener("click", () => applyLanguage(btn.dataset.langOption));
+    });
 
     // ========= Modal =========
     const modal = $("#modal");
     const closeModal = () => {
       modal.classList.remove("open");
       document.body.style.overflow = "";
+      activeProjectId = null;
     };
 
-    function openModal(p){
-      $("#modalTitle").textContent = p.title;
-      $("#modalDesc").textContent = p.subtitle;
-      $("#modalMeta").textContent = p.meta;
-      $("#modalIcon").innerHTML = `<i data-lucide="${p.icon}"></i>`;
+    function openModal(p, shouldFocus = true){
+      const localized = getProjectByLang(p);
+      activeProjectId = p.id;
+
+      $("#modalTitle").textContent = localized.title;
+      $("#modalDesc").textContent = localized.subtitle;
+      $("#modalMeta").textContent = localized.meta;
+      $("#modalIcon").innerHTML = `<i data-lucide="${localized.icon}"></i>`;
 
       const ul = $("#modalBullets");
       ul.innerHTML = "";
-      p.bullets.forEach(b => {
+      localized.bullets.forEach(b => {
         const li = document.createElement("li");
         li.textContent = b;
         ul.appendChild(li);
       });
 
       const tagWrap = $("#modalTags");
-      tagWrap.innerHTML = p.tags.map(t => `<span class="tag"><i data-lucide="tag"></i> ${t}</span>`).join("");
+      tagWrap.innerHTML = localized.tags.map(t => `<span class="tag"><i data-lucide="tag"></i> ${t}</span>`).join("");
 
       modal.classList.add("open");
       document.body.style.overflow = "hidden";
       if(window.lucide) lucide.createIcons();
-      $("#closeModal").focus();
+      if(shouldFocus) $("#closeModal").focus();
     }
 
     $("#closeModal").addEventListener("click", closeModal);
     $("#closeModal2").addEventListener("click", closeModal);
     modal.addEventListener("click", (e)=> { if(e.target === modal) closeModal(); });
     document.addEventListener("keydown", (e)=> { if(e.key === "Escape" && modal.classList.contains("open")) closeModal(); });
+
+    function updateMeta(langData){
+      document.title = langData.docTitle;
+
+      const metaDesc = $('meta[name="description"]');
+      if(metaDesc) metaDesc.setAttribute("content", langData.metaDescription);
+
+      const ogTitle = $('meta[property="og:title"]');
+      if(ogTitle) ogTitle.setAttribute("content", langData.ogTitle);
+
+      const ogDescription = $('meta[property="og:description"]');
+      if(ogDescription) ogDescription.setAttribute("content", langData.ogDescription);
+    }
+
+    function applyLanguage(lang, persist = true){
+      const langData = I18N[lang];
+      if(!langData) return;
+
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      updateMeta(langData);
+
+      Object.entries(langData.text).forEach(([id, value]) => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = value;
+      });
+      $$(".copyBtnText").forEach(el => { el.textContent = langData.text.copyMiniText; });
+
+      if(lang === "en"){
+        Object.entries(I18N_HTML_EN).forEach(([id, value]) => {
+          const el = document.getElementById(id);
+          if(el) el.innerHTML = value;
+        });
+      }else{
+        HTML_TRANSLATABLE_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if(el && ORIGINAL_HTML[id]) el.innerHTML = ORIGINAL_HTML[id];
+        });
+      }
+
+      const copyIntroBtn = $("#copyIntro");
+      if(copyIntroBtn) copyIntroBtn.setAttribute("title", langData.text.copyIntroText);
+
+      const brandLink = $("#brandLink");
+      if(brandLink) brandLink.setAttribute("aria-label", langData.aria.brandLink);
+
+      const mainNav = $("#mainNav");
+      if(mainNav) mainNav.setAttribute("aria-label", langData.aria.nav);
+
+      const langSwitch = $("#langSwitch");
+      if(langSwitch) langSwitch.setAttribute("aria-label", langData.aria.langSwitch);
+
+      const heroSection = $("#heroSection");
+      if(heroSection) heroSection.setAttribute("aria-label", langData.aria.hero);
+
+      const heroChips = $("#heroChips");
+      if(heroChips) heroChips.setAttribute("aria-label", langData.aria.chips);
+
+      const projectFilters = $("#projectFilters");
+      if(projectFilters) projectFilters.setAttribute("aria-label", langData.aria.filters);
+
+      if(grid) grid.setAttribute("aria-label", langData.aria.projectGrid);
+
+      const closeBtn = $("#closeModal");
+      if(closeBtn) closeBtn.setAttribute("aria-label", langData.aria.closeModal);
+
+      const linkedinLink = $('a[href*="linkedin.com"]');
+      if(linkedinLink) linkedinLink.setAttribute("aria-label", langData.aria.linkedin);
+
+      const githubLink = $('a[href*="github.com"]');
+      if(githubLink) githubLink.setAttribute("aria-label", langData.aria.github);
+
+      $$("[data-lang-option]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.langOption === lang);
+      });
+
+      renderProjects(PROJECTS);
+      applyFilter(activeFilter);
+
+      if(modal.classList.contains("open") && activeProjectId){
+        const activeProject = PROJECTS.find(p => p.id === activeProjectId);
+        if(activeProject) openModal(activeProject, false);
+      }else{
+        $("#modalTitle").textContent = langData.text.modalFallbackTitle;
+        $("#modalDesc").textContent = langData.text.modalFallbackDesc;
+      }
+
+      if(persist) localStorage.setItem(LANG_STORAGE_KEY, lang);
+      if(window.lucide) lucide.createIcons();
+    }
+
+    const gradientState = { current: 0, target: 0, raf: 0 };
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function mixColor(from, to, t){
+      const r = Math.round(from[0] + (to[0] - from[0]) * t);
+      const g = Math.round(from[1] + (to[1] - from[1]) * t);
+      const b = Math.round(from[2] + (to[2] - from[2]) * t);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function setGradient(progress){
+      const p = Math.max(0, Math.min(1, progress));
+      const root = document.documentElement.style;
+      root.setProperty("--orb1-x", `${(20 + p * 9).toFixed(2)}%`);
+      root.setProperty("--orb1-y", `${(12 + p * 20).toFixed(2)}%`);
+      root.setProperty("--orb2-x", `${(80 - p * 10).toFixed(2)}%`);
+      root.setProperty("--orb2-y", `${(18 + p * 18).toFixed(2)}%`);
+      root.setProperty("--bg-top", mixColor([7, 9, 18], [10, 18, 34], p));
+      root.setProperty("--bg-bottom", mixColor([11, 16, 32], [8, 22, 33], p));
+    }
+
+    function animateGradient(){
+      gradientState.current += (gradientState.target - gradientState.current) * 0.08;
+      setGradient(gradientState.current);
+
+      if(Math.abs(gradientState.target - gradientState.current) > 0.001){
+        gradientState.raf = requestAnimationFrame(animateGradient);
+      }else{
+        gradientState.current = gradientState.target;
+        setGradient(gradientState.current);
+        gradientState.raf = 0;
+      }
+    }
+
+    function updateGradientTarget(){
+      const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+      gradientState.target = scrollMax > 0 ? (window.scrollY / scrollMax) : 0;
+
+      if(reduceMotion){
+        gradientState.current = gradientState.target;
+        setGradient(gradientState.current);
+        return;
+      }
+
+      if(!gradientState.raf){
+        gradientState.raf = requestAnimationFrame(animateGradient);
+      }
+    }
 
     // ========= Reveal on scroll =========
     const revealEls = $$(".reveal");
@@ -1182,8 +1767,7 @@
     $("#year").textContent = new Date().getFullYear();
 
     $("#copyIntro").addEventListener("click", ()=>{
-      const intro = `Soy David (18), estudiante de FP SMR y FP Dual como Técnico Desarrollador de IA. Combino sistemas/infra, automatización, IA aplicada y desarrollo web. También tengo experiencia montando y administrando servidores de Minecraft, con foco en estabilidad/rendimiento y operación.`;
-      copy(intro);
+      copy(I18N[currentLang].copy.intro);
     });
 
     $$("[data-copy]").forEach(btn => {
@@ -1195,17 +1779,21 @@
     });
 
     $("#copyAll").addEventListener("click", ()=>{
-      const text = `LinkedIn: https://www.linkedin.com/in/david-torres-l%C3%B3pez-56b303394/\nGitHub: https://github.com/DavidDemonio\nDiscord: davidddlol__ / kuroo787`;
-      copy(text);
+      copy(I18N[currentLang].copy.contact);
     });
 
     // ========= Init =========
-    renderProjects(PROJECTS);
-    applyFilter("all");
-
-    window.addEventListener("DOMContentLoaded", () => {
-      if(window.lucide) lucide.createIcons();
+    HTML_TRANSLATABLE_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) ORIGINAL_HTML[id] = el.innerHTML;
     });
+
+    applyLanguage(currentLang, false);
+    applyFilter("all");
+    updateGradientTarget();
+
+    window.addEventListener("scroll", updateGradientTarget, { passive: true });
+    window.addEventListener("resize", updateGradientTarget);
   </script>
 </body>
 </html>
