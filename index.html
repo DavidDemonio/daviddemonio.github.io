@@ -1794,6 +1794,19 @@
 
     window.addEventListener("scroll", updateGradientTarget, { passive: true });
     window.addEventListener("resize", updateGradientTarget);
+
+    function initIconsWhenReady(){
+      if(window.lucide && typeof window.lucide.createIcons === "function"){
+        window.lucide.createIcons();
+        return true;
+      }
+      return false;
+    }
+
+    if(!initIconsWhenReady()){
+      window.addEventListener("DOMContentLoaded", initIconsWhenReady, { once: true });
+      window.addEventListener("load", initIconsWhenReady, { once: true });
+    }
   </script>
 </body>
 </html>
